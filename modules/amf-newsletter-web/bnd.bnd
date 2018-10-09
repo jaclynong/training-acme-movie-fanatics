@@ -1,0 +1,4 @@
+Bundle-Name: amf-newsletter-web
+Bundle-SymbolicName: amf.newsletter.web
+Bundle-Version: 1.0.0
+Export-Package: amf.newsletter.web.constants

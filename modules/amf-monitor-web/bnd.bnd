@@ -1,0 +1,4 @@
+Bundle-Name: amf-monitor-web
+Bundle-SymbolicName: amf.monitor.web
+Bundle-Version: 1.0.0
+Export-Package: amf.monitor.web.constants

@@ -1,0 +1,6 @@
+Bundle-Name: amf-newsletter
+Bundle-SymbolicName: com.liferay.training.amf.newsletter.model
+Bundle-Version: 1.0.0
+Export-Package: \
+	com.liferay.training.amf.newsletter.model,\
+	com.liferay.training.amf.newsletter.service

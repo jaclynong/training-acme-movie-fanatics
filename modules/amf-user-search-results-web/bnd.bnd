@@ -1,0 +1,4 @@
+Bundle-Name: amf-user-search-results-web
+Bundle-SymbolicName: amf.user.search.results.web
+Bundle-Version: 1.0.0
+Export-Package: amf.user.search.results.web.constants

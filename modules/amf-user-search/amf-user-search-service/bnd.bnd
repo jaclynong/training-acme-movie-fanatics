@@ -1,0 +1,9 @@
+Bundle-Name: amf-user-search-service
+Bundle-SymbolicName: amf.user.search.service
+Bundle-Version: 1.0.0
+Liferay-Require-SchemaVersion: 1.0.0
+Liferay-Service: true
+Export-Package: \
+	amf.user.search.service.permission,\
+	amf.user.search.service.validator,\
+	amf.user.search.service.dynamicquery
