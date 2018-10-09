@@ -24,6 +24,7 @@ import amf.monitor.web.constants.AmfMonitorWebPortletKeys;
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",
 		"javax.portlet.name=" + AmfMonitorWebPortletKeys.AmfMonitorWeb,
+		"javax.portlet.display-name=AMF User Events Monitor",
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},

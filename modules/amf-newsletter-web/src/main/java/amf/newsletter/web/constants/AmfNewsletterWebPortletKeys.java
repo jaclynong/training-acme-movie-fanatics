@@ -7,4 +7,5 @@ public class AmfNewsletterWebPortletKeys {
 
 	public static final String AmfNewsletterWeb = "amfnewsletterweb";
 	public static final String AmfNewsletterIssueWeb = "amfnewsletterissueweb";
+	public static final String AmfNewsletterSearchResultsWeb = "amfnewslettersearchresultsweb";
 }

@@ -1,0 +1,4 @@
+Bundle-Activator: amf.newsletter.search.index.postprocessor.AmfNewsletterSearchIndexPostprocessorActivator
+Bundle-Name: amf-newsletter-search-index-postprocessor
+Bundle-SymbolicName: amf.newsletter.search.index.postprocessor
+Bundle-Version: 1.0.0

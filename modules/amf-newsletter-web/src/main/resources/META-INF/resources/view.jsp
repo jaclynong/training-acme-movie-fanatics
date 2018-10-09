@@ -2,6 +2,22 @@
 
 <portlet:renderURL var="portletURL"></portlet:renderURL>
 
+<portlet:actionURL var="searchNewslettersUrl"
+				   name="/newsletters/search/redirect">
+	<portlet:param name="redirect" value="${param.redirect}" />
+</portlet:actionURL>
+
+<aui:form name="searchNewslettersForm" action="${searchNewslettersUrl}"  >	
+	<div class="search-form">
+	     <span class="aui-search-bar">
+	         <aui:input inlineField="<%= true %>" label="" 
+	         name="searchKeyword" size="30" title="search-entries" type="text"/>
+	
+	         <aui:button type="submit" value="search" />
+	     </span>
+ 	</div>
+</aui:form>
+
 <liferay-ui:tabs names="${newsletterIssueYearsCommaDelimitedString}" refresh="<%= false %>" url="<%= portletURL.toString() %>">
 	<c:forEach var="newsletterIssueYear" items="${newsletterIssueYears}">
 		<liferay-ui:section>

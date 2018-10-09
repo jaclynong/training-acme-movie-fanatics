@@ -31,6 +31,7 @@ import amf.user.search.web.constants.AmfUserSearchWebPortletKeys;
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",
 		"javax.portlet.name=" + AmfUserSearchWebPortletKeys.AmfUserSearchWeb,
+		"javax.portlet.display-name=AMF User Search",
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user",
 		"javax.portlet.supported-publishing-event=ipc.usersearchbyzip;http://my.event.tld/ns"

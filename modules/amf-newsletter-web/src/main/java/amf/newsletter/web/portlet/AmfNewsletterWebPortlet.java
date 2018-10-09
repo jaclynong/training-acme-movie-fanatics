@@ -19,6 +19,7 @@ import org.osgi.service.component.annotations.Component;
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",
 		"javax.portlet.name=" + AmfNewsletterWebPortletKeys.AmfNewsletterWeb,
+		"javax.portlet.display-name=AMF Newsletters",
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},

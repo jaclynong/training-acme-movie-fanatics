@@ -29,6 +29,7 @@ import com.liferay.training.amf.registration.portlet.command.RegisterUserMVCRend
 		"javax.portlet.init-param.add-process-action-success-action=false",
 		"javax.portlet.init-param.add-process-action-general-error-action=false",
 		"javax.portlet.name=" + AmfRegistrationPortletKeys.AmfRegistration,
+		"javax.portlet.display-name=AMF Sign In & Registration",
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user",
 		"com.liferay.portlet.add-default-resource=true"
