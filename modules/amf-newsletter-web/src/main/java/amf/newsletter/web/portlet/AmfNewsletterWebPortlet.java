@@ -14,14 +14,11 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	immediate = true,
 	property = {
-		"com.liferay.portlet.display-category=category.sample",
-		"com.liferay.portlet.instanceable=false",
-		"javax.portlet.init-param.template-path=/",
+		"com.liferay.portlet.display-category=category.sample", "com.liferay.portlet.instanceable=false",
+		"javax.portlet.display-name=AMF Newsletters", "javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",
 		"javax.portlet.name=" + AmfNewsletterWebPortletKeys.AmfNewsletterWeb,
-		"javax.portlet.display-name=AMF Newsletters",
-		"javax.portlet.resource-bundle=content.Language",
-		"javax.portlet.security-role-ref=power-user,user"
+		"javax.portlet.resource-bundle=content.Language", "javax.portlet.security-role-ref=power-user,user"
 	},
 	service = Portlet.class
 )

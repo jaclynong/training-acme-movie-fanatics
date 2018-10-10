@@ -1,13 +1,13 @@
 package com.liferay.training.amf.newsletter.web.friendlyurlmapping;
 
-import org.osgi.service.component.annotations.Component;
+import amf.newsletter.web.constants.AmfNewsletterWebPortletKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper;
 import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
 
-import amf.newsletter.web.constants.AmfNewsletterWebPortletKeys;
+import org.osgi.service.component.annotations.Component;
 
 @Component(
 	property = {
@@ -16,13 +16,14 @@ import amf.newsletter.web.constants.AmfNewsletterWebPortletKeys;
 	},
 	service = FriendlyURLMapper.class
 )
-public class NewsletterIssueFriendlyUrlMapper extends DefaultFriendlyURLMapper  {
+public class NewsletterIssueFriendlyUrlMapper extends DefaultFriendlyURLMapper {
 
 	@Override
-	public String getMapping() {		
-		return _MAPPING;
+	public String getMapping() {return _MAPPING;
 	}
 
 	private static final String _MAPPING = "article-issue";
+
 	private static final Log _log = LogFactoryUtil.getLog(NewsletterIssueFriendlyUrlMapper.class);
+
 }

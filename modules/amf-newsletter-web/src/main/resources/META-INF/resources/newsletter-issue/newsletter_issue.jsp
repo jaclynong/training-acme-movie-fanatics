@@ -8,7 +8,7 @@
 
 <p>${newsletterIssue.get_description()}</p>
 
-<c:forEach var="newsletterArticle" items="${newsletterIssue.get_newsletterArticles()}">
+<c:forEach items="${newsletterIssue.get_newsletterArticles()}" var="newsletterArticle">
 	<h3 style="padding-left:1em">${newsletterArticle.get_title()}</h3>
 	<p>${newsletterArticle.get_content()}</p>
 </c:forEach>

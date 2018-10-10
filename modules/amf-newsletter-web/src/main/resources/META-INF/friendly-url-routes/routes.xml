@@ -5,6 +5,6 @@
 	<route>
 		<pattern>/{newsletterIssueNumber:\d+}</pattern>
 		<implicit-parameter name="p_p_lifecycle">0</implicit-parameter>
-        <implicit-parameter name="mvcRenderCommandName">/newsletter/issue</implicit-parameter>    
+		<implicit-parameter name="mvcRenderCommandName">/newsletter/issue</implicit-parameter>
 	</route>
 </routes>
