@@ -48,7 +48,7 @@ public class NewsletterSearchService {
 		for (int i = 0; i < journalArticleHits.getDocs().length; i++) {
 			Document doc = journalArticleHits.doc(i);
 
-			Integer issueNumber = GetterUtil.getInteger(doc.get("issueNumber"));		
+			Integer issueNumber = GetterUtil.getInteger(doc.get("issueNumber"));
 			String journalArticleType = doc.get("journalArticleType");
 
 			NewsletterIssue newsletterIssue = null;
@@ -58,7 +58,7 @@ public class NewsletterSearchService {
 				newsletterIssue = parseNewsletterIssueFromDocument(doc, issueNumber);
 			} else {
 				newsletterIssue = findParentNewsletterIssueWithIssueNumber(
-						httpServletRequest, issueNumber, startIndex, endIndex);
+					httpServletRequest, issueNumber, startIndex, endIndex);
 			}
 
 			if (newsletterIssue == null)continue;
@@ -105,7 +105,7 @@ public class NewsletterSearchService {
 			Document doc = journalArticleHitsForIssueNumberSearch.doc(i);
 
 			String journalArticleType = doc.get("journalArticleType");
-			
+
 			if (journalArticleType.equals(JournalArticleType.NEWSLETTER_ISSUE.getDdmStructureKey()))
 			{
 				newsletterIssueToReturn = parseNewsletterIssueFromDocument(doc);
@@ -156,25 +156,25 @@ public class NewsletterSearchService {
 	private NewsletterIssue parseNewsletterIssueFromDocument(Document doc) {
 		return parseNewsletterIssueFromDocument(doc, 0);
 	}
-	
+
 	//TODO: separate out to another class
 	private NewsletterIssue parseNewsletterIssueFromDocument(Document doc, Integer issueNumber) {
 		NewsletterIssue newsletterIssue = new NewsletterIssue();
-		
+
 		if (issueNumber == 0) {
 			issueNumber = GetterUtil.getInteger(doc.get("issueNumber"));
 		}
 
 		Date issueDate = null;
+
 		try {
-			
 			issueDate = GetterUtil.getDate(doc.getDate("issueDate"), new SimpleDateFormat("yyyy-MM-dd"));
 			_log.fatal(String.format("issueDate = %s", issueDate.toString()));
 		} catch (ParseException e) {
 			_log.fatal(String.format("Error parsing issue date from search document: (%s)", e.getMessage()));
 		}
-		
-		newsletterIssue.set_issueNumber(issueNumber); 
+
+		newsletterIssue.set_issueNumber(issueNumber);
 		newsletterIssue.set_issueDate(issueDate);
 
 		return newsletterIssue;

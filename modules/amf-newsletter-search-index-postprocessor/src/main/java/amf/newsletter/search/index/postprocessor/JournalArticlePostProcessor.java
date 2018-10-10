@@ -1,9 +1,5 @@
 package amf.newsletter.search.index.postprocessor;
 
-import java.util.Locale;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -20,35 +16,35 @@ import com.liferay.training.amf.newsletter.model.NewsletterIssue;
 import com.liferay.training.amf.newsletter.service.NewsletterArticleSaxReaderMapper;
 import com.liferay.training.amf.newsletter.service.NewsletterIssueSaxReaderMapper;
 
+import java.util.Locale;
+
+import org.osgi.service.component.annotations.Component;
+
 @Component(
-	immediate = true,
-	property = "indexer.class.name=com.liferay.journal.model.JournalArticle",
+	immediate = true, property = "indexer.class.name=com.liferay.journal.model.JournalArticle",
 	service = IndexerPostProcessor.class
 )
 public class JournalArticlePostProcessor implements IndexerPostProcessor {
 
 	@Override
-	public void postProcessContextBooleanFilter(
-			BooleanFilter booleanFilter, SearchContext searchContext)
+	public void postProcessContextBooleanFilter(BooleanFilter booleanFilter, SearchContext searchContext)
 		throws Exception {
 	}
 
 	@Override
-	public void postProcessContextQuery(
-			BooleanQuery contextQuery, SearchContext searchContext)
-		throws Exception {
+	public void postProcessContextQuery(BooleanQuery contextQuery, SearchContext searchContext) throws Exception {
 	}
 
 	@Override
-	public void postProcessDocument(Document document, Object obj)
-		throws Exception {
-		
+	public void postProcessDocument(Document document, Object obj) throws Exception {
 		JournalArticle journalArticle = (JournalArticle)obj;
-		
+
 		//TODO: might want to make the Newsletter* classes implement an interface & create a factory that will return whichever type
+
 		if (isNewsletterIssue(journalArticle))
 		{
 			NewsletterIssue newsletterIssue = new NewsletterIssueSaxReaderMapper().map(journalArticle);
+
 			document.add(new Field("issueNumber", newsletterIssue.get_issueNumber().toString()));
 			document.addDate("issueDate", newsletterIssue.get_issueDate());
 			document.add(new Field("journalArticleType", JournalArticleType.NEWSLETTER_ISSUE.getDdmStructureKey()));
@@ -56,31 +52,14 @@ public class JournalArticlePostProcessor implements IndexerPostProcessor {
 		else if (isNewsletterArticle(journalArticle))
 		{
 			NewsletterArticle newsletterArticle = new NewsletterArticleSaxReaderMapper().map(journalArticle);
+
 			document.add(new Field("issueNumber", newsletterArticle.get_issueNumber().toString()));
 			document.add(new Field("journalArticleType", JournalArticleType.NEWSLETTER_ARTICLE.getDdmStructureKey()));
 		}
 	}
-	
-	//TODO: move to shared class
-	private boolean isNewsletterIssue(JournalArticle journalArticle) {
-		return structureKeyEqualsIgnoreCase(journalArticle, JournalArticleType.NEWSLETTER_ISSUE.getDdmStructureKey());
-	}
-	
-	private boolean isNewsletterArticle(JournalArticle journalArticle) {
-		return structureKeyEqualsIgnoreCase(journalArticle, JournalArticleType.NEWSLETTER_ARTICLE.getDdmStructureKey());
-	}
-	
-	//TODO: move to shared class
-	private boolean structureKeyEqualsIgnoreCase(JournalArticle journalArticle, String structureKey) {
-		String structureKeyFromJournalArticle = journalArticle.getDDMStructureKey();
-		_log.fatal(String.format("structureKey = %s", structureKey));
-		return structureKeyFromJournalArticle.equalsIgnoreCase(structureKey);
-	}
-	
+
 	@Override
-	public void postProcessFullQuery(
-			BooleanQuery fullQuery, SearchContext searchContext)
-		throws Exception {
+	public void postProcessFullQuery(BooleanQuery fullQuery, SearchContext searchContext) throws Exception {
 	}
 
 	@Override
@@ -89,17 +68,30 @@ public class JournalArticlePostProcessor implements IndexerPostProcessor {
 	}
 
 	@Override
-	public void postProcessSearchQuery(
-			BooleanQuery searchQuery, SearchContext searchContext)
-		throws Exception {
+	public void postProcessSearchQuery(BooleanQuery searchQuery, SearchContext searchContext) throws Exception {
 	}
 
 	@Override
-	public void postProcessSummary(
-		Summary summary, Document document, Locale locale, String snippet) {
+	public void postProcessSummary(Summary summary, Document document, Locale locale, String snippet) {
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		JournalArticlePostProcessor.class);
+	private boolean isNewsletterArticle(JournalArticle journalArticle) {
+		return structureKeyEqualsIgnoreCase(journalArticle, JournalArticleType.NEWSLETTER_ARTICLE.getDdmStructureKey());
+	}
+
+	//TODO: move to shared class
+	private boolean isNewsletterIssue(JournalArticle journalArticle) {
+		return structureKeyEqualsIgnoreCase(journalArticle, JournalArticleType.NEWSLETTER_ISSUE.getDdmStructureKey());
+	}
+
+	//TODO: move to shared class
+	private boolean structureKeyEqualsIgnoreCase(JournalArticle journalArticle, String structureKey) {
+		String structureKeyFromJournalArticle = journalArticle.getDDMStructureKey();
+		_log.fatal(String.format("structureKey = %s", structureKey));
+
+		return structureKeyFromJournalArticle.equalsIgnoreCase(structureKey);
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(JournalArticlePostProcessor.class);
 
 }
