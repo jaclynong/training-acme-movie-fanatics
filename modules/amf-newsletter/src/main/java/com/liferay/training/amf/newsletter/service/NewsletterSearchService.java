@@ -1,6 +1,9 @@
 package com.liferay.training.amf.newsletter.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,15 +11,14 @@ import javax.portlet.RenderRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import com.liferay.journal.model.JournalArticle;
-import com.liferay.journal.service.JournalArticleLocalServiceUtil;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Document;
+import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchContextFactory;
 import com.liferay.portal.kernel.search.SearchException;
@@ -27,10 +29,10 @@ import com.liferay.training.amf.newsletter.model.NewsletterSearchResult;
 
 public class NewsletterSearchService {
 	
-	public NewsletterSearchResult searchNewsletters(RenderRequest renderRequest, long groupId, String searchKeyword,
+	private SearchContext getSearchContext(HttpServletRequest httpServletRequest, String searchKeyword,
 			int startIndex, int endIndex) {
 		
-		HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);
+		_log.fatal(String.format("Entering searchNewsletters, doing a search on %s", searchKeyword));
 		
 		SearchContext searchContext = SearchContextFactory.getInstance(httpServletRequest);
 	    searchContext.setKeywords(searchKeyword);
@@ -38,9 +40,17 @@ public class NewsletterSearchService {
 	    searchContext.setStart(startIndex);
 	    searchContext.setEnd(endIndex);
 	    
-	    Indexer journalArticleIndexer = IndexerRegistryUtil.getIndexer(JournalArticle.class);
+	    QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.addSelectedFieldNames(
+			"issueNumber", "issueDate", Field.NAME);
 	    
-	    Hits hits;
+	    return searchContext; 
+	}
+	
+	private Hits getHits(Indexer journalArticleIndexer, SearchContext searchContext) {
+		
+		Hits hits;
 		try {
 			hits = journalArticleIndexer.search(searchContext);
 		} catch (SearchException e) {
@@ -48,45 +58,49 @@ public class NewsletterSearchService {
 			return null;
 		}
 	    _log.fatal(String.format("hits.Length = %d", hits != null ? hits.getLength() : 0));
-
+	    
+	    return hits;
+	}
+	
+	public NewsletterSearchResult search(RenderRequest renderRequest, String searchKeyword,
+			int startIndex, int endIndex) {
+		
+		HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);
+		
+		SearchContext keywordSearchContext = getSearchContext(httpServletRequest, searchKeyword, startIndex, endIndex);
+		Indexer journalArticleIndexer = IndexerRegistryUtil.getIndexer(JournalArticle.class);
+		Hits journalArticleHits = getHits(journalArticleIndexer, keywordSearchContext);
+		
 	    Map<Integer, NewsletterIssue> newsletterIssues = new HashMap<Integer, NewsletterIssue>();
 	    NewsletterIssueSaxReaderMapper newsLetterIssueMapper = new NewsletterIssueSaxReaderMapper();
 	    
-        for (int i = 0; i < hits.getDocs().length; i++) {
-            Document doc = hits.doc(i);
+        for (int i = 0; i < journalArticleHits.getDocs().length; i++) {
+            Document doc = journalArticleHits.doc(i);
 
-            String articleIdAsString = GetterUtil.getString(doc.get("articleId"));
-
-            JournalArticle journalArticle = null;
-
-            try {
-            	journalArticle = JournalArticleLocalServiceUtil.getArticle(groupId, articleIdAsString);
-            } 
-            catch (PortalException pe) {
-                _log.error(pe.getLocalizedMessage());
-                continue;
-            } 
-            catch (SystemException se) {
-                _log.error(se.getLocalizedMessage());
-                continue;
-            }
+            Integer issueNumber = GetterUtil.getInteger(doc.get("issueNumber"));
+            _log.fatal(String.format("issueNumber = %d", issueNumber));
             
-        	NewsletterIssue newsletterIssue = getNewsletterIssue(newsLetterIssueMapper, journalArticle);
-        	if (newsletterIssue == null) continue;
-        	
-        	Integer issueNumber = newsletterIssue.get_issueNumber();
-        	if (!newsletterIssues.containsKey(issueNumber))
-    		{
-        		_log.fatal(String.format("Adding newsletter issue (%d)", issueNumber));
-        		newsletterIssues.put(issueNumber, newsletterIssue);
-    		}
+			NewsletterIssue newsletterIssue = tryGetNewsletterIssueFromDocument(doc);
+			if (newsletterIssue == null)
+			{
+			  	newsletterIssue = findNewsletterIssueWithIssueNumber(
+			  			httpServletRequest, issueNumber, startIndex, endIndex);
+			}
+	          
+	      	if (newsletterIssue == null) continue;
+	      	
+	      	if (!newsletterIssues.containsKey(issueNumber))
+	  		{
+	      		_log.fatal(String.format("Adding newsletter issue (%d)", issueNumber));
+	      		newsletterIssues.put(issueNumber, newsletterIssue);
+	  		} 
         }
         NewsletterSearchResult newsletterSearchResult = new NewsletterSearchResult();
         newsletterSearchResult.set_newsletterIssues(new ArrayList(newsletterIssues.values()));
         
         int totalHits = 0;
 		try {
-			totalHits = (int) journalArticleIndexer.searchCount(searchContext);
+			totalHits = (int) journalArticleIndexer.searchCount(keywordSearchContext);
 		} catch (SearchException e) {
 			_log.fatal(String.format("Error during search count: %s", e.getMessage()));
 		}
@@ -95,36 +109,51 @@ public class NewsletterSearchService {
         return newsletterSearchResult;
 	}
 	
-	//TODO: move to shared class
-	private boolean isNewsletterIssue(JournalArticle journalArticle) {
-		return structureKeyEqualsIgnoreCase(journalArticle, NEWSLETTER_ISSUE_STRUCTURE_KEY);
-	}
-	
-	//TODO: move to shared class
-	private boolean isNewsletterArticle(JournalArticle journalArticle) {
-		return structureKeyEqualsIgnoreCase(journalArticle, NEWSLETTER_ARTICLE_STRUCTURE_KEY);
-	}
-	
-	//TODO: move to shared class
-	private boolean structureKeyEqualsIgnoreCase(JournalArticle journalArticle, String structureKey) {
-		String structureKeyFromJournalArticle = journalArticle.getDDMStructureKey();
-		_log.fatal(String.format("structureKey = %s", structureKey));
-		return structureKeyFromJournalArticle.equalsIgnoreCase(structureKey);
-	}
-	
-	private NewsletterIssue getNewsletterIssue(NewsletterIssueSaxReaderMapper newsLetterIssueMapper, JournalArticle journalArticle) {
+	private NewsletterIssue tryGetNewsletterIssueFromDocument(Document doc) {
 		
-		NewsletterIssue newsletterIssue = null;
-        if (isNewsletterIssue(journalArticle))
-			newsletterIssue = newsLetterIssueMapper.map(journalArticle);
-        else if (isNewsletterArticle(journalArticle))
-        	newsletterIssue = null; //TODO: search for parent newsletter issue
-    	return newsletterIssue;
+		NewsletterIssue newsletterIssue = new NewsletterIssue();
+		
+		Integer issueNumber = GetterUtil.getInteger(doc.get("issueNumber"));
+        _log.fatal(String.format("issueNumber = %d", issueNumber));
+        
+        Date issueDate = null;
+        try {
+			issueDate = GetterUtil.getDate(doc.getDate("issueDate"), new SimpleDateFormat("yyyy-MM-dd"));
+			_log.fatal(String.format("issueDate = %s", issueDate.toString()));
+		} catch (ParseException e) {
+			_log.fatal(String.format("Error parsing issue date from search document: (%s)", e.getMessage()));
+			return null;
+		}
+        
+        newsletterIssue.set_issueNumber(issueNumber);
+	  	newsletterIssue.set_issueDate(issueDate);
+	  	
+	  	return newsletterIssue;
+	}
+
+	private NewsletterIssue findNewsletterIssueWithIssueNumber(HttpServletRequest httpServletRequest, 
+			Integer issueNumber, int startIndex, int endIndex)  {
+		
+		SearchContext issueNumberSearchContext = getSearchContext(
+				httpServletRequest, issueNumber.toString(), startIndex, endIndex);
+		Indexer journalArticleIndexerForIssueNumberSearch = IndexerRegistryUtil.getIndexer(JournalArticle.class);
+		Hits journalArticleHitsForIssueNumberSearch = getHits(journalArticleIndexerForIssueNumberSearch, issueNumberSearchContext);
+	  	if (journalArticleHitsForIssueNumberSearch == null) return null;
+	  	
+	  	NewsletterIssue newsletterIssueToReturn = null;
+	  	for (int i = 0; i < journalArticleHitsForIssueNumberSearch.getDocs().length; i++) {
+            Document doc = journalArticleHitsForIssueNumberSearch.doc(i);
+            
+            NewsletterIssue newsletterIssue = tryGetNewsletterIssueFromDocument(doc);
+            if (newsletterIssue != null)
+            {
+            	newsletterIssueToReturn = newsletterIssue;
+            	break;
+            }
+	  	}
+	  	
+	  	return newsletterIssueToReturn;
 	}
 	
-	//TODO: look up structure instead of hard-coded structure keys
-	private static final String NEWSLETTER_ISSUE_STRUCTURE_KEY = "45727";
-	private static final String NEWSLETTER_ARTICLE_STRUCTURE_KEY = "45731";
-		
 	private static final Log _log = LogFactoryUtil.getLog(NewsletterSearchService.class);
 }

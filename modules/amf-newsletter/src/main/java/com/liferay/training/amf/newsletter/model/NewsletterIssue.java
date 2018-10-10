@@ -13,6 +13,8 @@ public class NewsletterIssue {
 
 	private JournalArticle _journalArticle;
 	
+	public NewsletterIssue() { }
+	
 	public NewsletterIssue(JournalArticle journalArticle) {
 		_journalArticle = journalArticle;
 	}

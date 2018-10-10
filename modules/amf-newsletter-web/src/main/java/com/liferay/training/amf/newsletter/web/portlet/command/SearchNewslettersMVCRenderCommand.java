@@ -68,7 +68,7 @@ public class SearchNewslettersMVCRenderCommand implements MVCRenderCommand {
 		int newsletterIssueEndIndex = newsletterSearchContainer.getEnd();
 		
 		NewsletterSearchResult newsletterSearchResult = new NewsletterSearchService()
-					.searchNewsletters(renderRequest, groupId, searchKeyword, newsletterIssueStartIndex,
+					.search(renderRequest, searchKeyword, newsletterIssueStartIndex,
 											newsletterIssueEndIndex);
 		
 		if (newsletterSearchResult != null)
