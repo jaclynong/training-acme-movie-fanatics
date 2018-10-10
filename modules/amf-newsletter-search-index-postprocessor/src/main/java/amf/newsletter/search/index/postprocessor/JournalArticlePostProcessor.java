@@ -14,6 +14,7 @@ import com.liferay.portal.kernel.search.IndexerPostProcessor;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
+import com.liferay.training.amf.newsletter.model.JournalArticleType;
 import com.liferay.training.amf.newsletter.model.NewsletterArticle;
 import com.liferay.training.amf.newsletter.model.NewsletterIssue;
 import com.liferay.training.amf.newsletter.service.NewsletterArticleSaxReaderMapper;
@@ -44,26 +45,29 @@ public class JournalArticlePostProcessor implements IndexerPostProcessor {
 		
 		JournalArticle journalArticle = (JournalArticle)obj;
 		
+		//TODO: might want to make the Newsletter* classes implement an interface & create a factory that will return whichever type
 		if (isNewsletterIssue(journalArticle))
 		{
 			NewsletterIssue newsletterIssue = new NewsletterIssueSaxReaderMapper().map(journalArticle);
 			document.add(new Field("issueNumber", newsletterIssue.get_issueNumber().toString()));
 			document.addDate("issueDate", newsletterIssue.get_issueDate());
+			document.add(new Field("journalArticleType", JournalArticleType.NEWSLETTER_ISSUE.getDdmStructureKey()));
 		}
 		else if (isNewsletterArticle(journalArticle))
 		{
 			NewsletterArticle newsletterArticle = new NewsletterArticleSaxReaderMapper().map(journalArticle);
 			document.add(new Field("issueNumber", newsletterArticle.get_issueNumber().toString()));
+			document.add(new Field("journalArticleType", JournalArticleType.NEWSLETTER_ARTICLE.getDdmStructureKey()));
 		}
 	}
 	
 	//TODO: move to shared class
 	private boolean isNewsletterIssue(JournalArticle journalArticle) {
-		return structureKeyEqualsIgnoreCase(journalArticle, NEWSLETTER_ISSUE_STRUCTURE_KEY);
+		return structureKeyEqualsIgnoreCase(journalArticle, JournalArticleType.NEWSLETTER_ISSUE.getDdmStructureKey());
 	}
 	
 	private boolean isNewsletterArticle(JournalArticle journalArticle) {
-		return structureKeyEqualsIgnoreCase(journalArticle, NEWSLETTER_ARTICLE_STRUCTURE_KEY);
+		return structureKeyEqualsIgnoreCase(journalArticle, JournalArticleType.NEWSLETTER_ARTICLE.getDdmStructureKey());
 	}
 	
 	//TODO: move to shared class
@@ -95,9 +99,6 @@ public class JournalArticlePostProcessor implements IndexerPostProcessor {
 		Summary summary, Document document, Locale locale, String snippet) {
 	}
 
-	//TODO: look up structure instead of hard-coded structure keys
-	private static final String NEWSLETTER_ISSUE_STRUCTURE_KEY = "45727";
-	private static final String NEWSLETTER_ARTICLE_STRUCTURE_KEY = "45731";
 	private static final Log _log = LogFactoryUtil.getLog(
 		JournalArticlePostProcessor.class);
 

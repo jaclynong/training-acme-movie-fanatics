@@ -14,6 +14,7 @@ import com.liferay.portal.kernel.search.SearchContextFactory;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.training.amf.newsletter.model.JournalArticleType;
 import com.liferay.training.amf.newsletter.model.NewsletterIssue;
 import com.liferay.training.amf.newsletter.model.NewsletterSearchResult;
 
@@ -47,15 +48,17 @@ public class NewsletterSearchService {
 		for (int i = 0; i < journalArticleHits.getDocs().length; i++) {
 			Document doc = journalArticleHits.doc(i);
 
-			Integer issueNumber = GetterUtil.getInteger(doc.get("issueNumber"));
-			_log.fatal(String.format("issueNumber = %d", issueNumber));
+			Integer issueNumber = GetterUtil.getInteger(doc.get("issueNumber"));		
+			String journalArticleType = doc.get("journalArticleType");
 
-			NewsletterIssue newsletterIssue = tryGetNewsletterIssueFromDocument(doc);
+			NewsletterIssue newsletterIssue = null;
 
-			if (newsletterIssue == null)
+			if (journalArticleType.equals(JournalArticleType.NEWSLETTER_ISSUE.getDdmStructureKey()))
 			{
-				newsletterIssue = findNewsletterIssueWithIssueNumber(
-					httpServletRequest, issueNumber, startIndex, endIndex);
+				newsletterIssue = parseNewsletterIssueFromDocument(doc, issueNumber);
+			} else {
+				newsletterIssue = findParentNewsletterIssueWithIssueNumber(
+						httpServletRequest, issueNumber, startIndex, endIndex);
 			}
 
 			if (newsletterIssue == null)continue;
@@ -84,7 +87,7 @@ public class NewsletterSearchService {
 		return newsletterSearchResult;
 	}
 
-	private NewsletterIssue findNewsletterIssueWithIssueNumber(HttpServletRequest httpServletRequest,
+	private NewsletterIssue findParentNewsletterIssueWithIssueNumber(HttpServletRequest httpServletRequest,
 			Integer issueNumber, int startIndex, int endIndex) {
 
 		SearchContext issueNumberSearchContext = getSearchContext(
@@ -101,11 +104,11 @@ public class NewsletterSearchService {
 		for (int i = 0; i < journalArticleHitsForIssueNumberSearch.getDocs().length; i++) {
 			Document doc = journalArticleHitsForIssueNumberSearch.doc(i);
 
-			NewsletterIssue newsletterIssue = tryGetNewsletterIssueFromDocument(doc);
-
-			if (newsletterIssue != null)
+			String journalArticleType = doc.get("journalArticleType");
+			
+			if (journalArticleType.equals(JournalArticleType.NEWSLETTER_ISSUE.getDdmStructureKey()))
 			{
-				newsletterIssueToReturn = newsletterIssue;
+				newsletterIssueToReturn = parseNewsletterIssueFromDocument(doc);
 
 				break;
 			}
@@ -144,29 +147,35 @@ public class NewsletterSearchService {
 
 		QueryConfig queryConfig = searchContext.getQueryConfig();
 
-		queryConfig.addSelectedFieldNames("issueNumber", "issueDate", Field.NAME);
+		queryConfig.addSelectedFieldNames("issueNumber", "issueDate", "journalArticleType", Field.NAME);
 
 		return searchContext;
 	}
 
-	private NewsletterIssue tryGetNewsletterIssueFromDocument(Document doc) {
+	//TODO: separate out to another class
+	private NewsletterIssue parseNewsletterIssueFromDocument(Document doc) {
+		return parseNewsletterIssueFromDocument(doc, 0);
+	}
+	
+	//TODO: separate out to another class
+	private NewsletterIssue parseNewsletterIssueFromDocument(Document doc, Integer issueNumber) {
 		NewsletterIssue newsletterIssue = new NewsletterIssue();
-
-		Integer issueNumber = GetterUtil.getInteger(doc.get("issueNumber"));
-		_log.fatal(String.format("issueNumber = %d", issueNumber));
+		
+		if (issueNumber == 0) {
+			issueNumber = GetterUtil.getInteger(doc.get("issueNumber"));
+		}
 
 		Date issueDate = null;
-
 		try {
+			
 			issueDate = GetterUtil.getDate(doc.getDate("issueDate"), new SimpleDateFormat("yyyy-MM-dd"));
 			_log.fatal(String.format("issueDate = %s", issueDate.toString()));
 		} catch (ParseException e) {
 			_log.fatal(String.format("Error parsing issue date from search document: (%s)", e.getMessage()));
-
-			return null;
 		}
-
-		newsletterIssue.set_issueNumber(issueNumber); newsletterIssue.set_issueDate(issueDate);
+		
+		newsletterIssue.set_issueNumber(issueNumber); 
+		newsletterIssue.set_issueDate(issueDate);
 
 		return newsletterIssue;
 	}
