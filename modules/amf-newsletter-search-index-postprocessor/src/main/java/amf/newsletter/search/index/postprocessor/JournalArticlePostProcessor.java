@@ -48,6 +48,7 @@ public class JournalArticlePostProcessor implements IndexerPostProcessor {
 			document.add(new Field("issueNumber", newsletterIssue.get_issueNumber().toString()));
 			document.addDate("issueDate", newsletterIssue.get_issueDate());
 			document.add(new Field("journalArticleType", JournalArticleType.NEWSLETTER_ISSUE.getDdmStructureKey()));
+			document.add(new Field("newsletterIssueTitle", newsletterIssue.get_title()));
 		}
 		else if (isNewsletterArticle(journalArticle))
 		{

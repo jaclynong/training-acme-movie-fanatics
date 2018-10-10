@@ -147,7 +147,7 @@ public class NewsletterSearchService {
 
 		QueryConfig queryConfig = searchContext.getQueryConfig();
 
-		queryConfig.addSelectedFieldNames("issueNumber", "issueDate", "journalArticleType", Field.NAME);
+		queryConfig.addSelectedFieldNames("issueNumber", "issueDate", "journalArticleType", "newsletterIssueTitle", Field.NAME);
 
 		return searchContext;
 	}
@@ -159,11 +159,15 @@ public class NewsletterSearchService {
 
 	//TODO: separate out to another class
 	private NewsletterIssue parseNewsletterIssueFromDocument(Document doc, Integer issueNumber) {
+		
 		NewsletterIssue newsletterIssue = new NewsletterIssue();
 
 		if (issueNumber == 0) {
 			issueNumber = GetterUtil.getInteger(doc.get("issueNumber"));
 		}
+		newsletterIssue.set_issueNumber(issueNumber);
+		
+		newsletterIssue.set_title(doc.get("newsletterIssueTitle"));
 
 		Date issueDate = null;
 
@@ -174,7 +178,6 @@ public class NewsletterSearchService {
 			_log.fatal(String.format("Error parsing issue date from search document: (%s)", e.getMessage()));
 		}
 
-		newsletterIssue.set_issueNumber(issueNumber);
 		newsletterIssue.set_issueDate(issueDate);
 
 		return newsletterIssue;

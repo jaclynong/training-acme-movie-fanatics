@@ -47,12 +47,18 @@ public class NewsletterIssue {
 		return _newsletterArticles;
 	}
 
+	private String _title;
+	
 	public String get_title() {
 		if (_journalArticle != null) {
 			return _journalArticle.getTitleCurrentValue();
+		} else {
+			return _title;
 		}
-
-		return null;
+	}
+	
+	public void set_title(String _title) {
+		this._title = _title;
 	}
 
 	public void set_byline(String _byline) {
