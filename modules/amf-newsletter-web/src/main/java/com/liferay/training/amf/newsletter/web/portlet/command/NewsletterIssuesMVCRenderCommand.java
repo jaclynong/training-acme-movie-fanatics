@@ -179,14 +179,14 @@ public class NewsletterIssuesMVCRenderCommand implements MVCRenderCommand {
 	}
 
 	private List<String> sortYears(Set<String> years) {
-		List<String> sortedList = new ArrayList<String>(years);
-		
+		List<String> sortedList = new ArrayList<>(years);
+
 		Collections.sort(sortedList);
 		Collections.reverse(sortedList);
 
 		return sortedList;
 	}
-	
+
 	private static final String VIEW_PATH = "/view.jsp";
 
 	private static final Log _log = LogFactoryUtil.getLog(NewsletterIssuesMVCRenderCommand.class);
