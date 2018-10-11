@@ -1,9 +1,9 @@
 package com.liferay.training.amf.monitor.service.event;
 
-import java.util.Date;
-
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.training.amf.monitor.model.Event;
+
+import java.util.Date;
 
 public class EventCreateDateComparator extends OrderByComparator<Event> {
 
@@ -12,7 +12,7 @@ public class EventCreateDateComparator extends OrderByComparator<Event> {
 	public static final String ORDER_BY_DESC = "amf_monitor_event.createDate DESC";
 
 	public static final String[] ORDER_BY_FIELDS = {"createDate"};
-	
+
 	public EventCreateDateComparator() {
 		this(false);
 	}
@@ -57,4 +57,5 @@ public class EventCreateDateComparator extends OrderByComparator<Event> {
 	}
 
 	private final boolean _ascending;
+
 }

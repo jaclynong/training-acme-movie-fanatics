@@ -31,9 +31,11 @@ import com.liferay.training.amf.monitor.service.base.EventServiceBaseImpl;
  * @see com.liferay.training.amf.monitor.service.EventServiceUtil
  */
 public class EventServiceImpl extends EventServiceBaseImpl {
-	/*
+
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Always use {@link com.liferay.training.amf.monitor.service.EventServiceUtil} to access the event remote service.
 	 */
+
 }

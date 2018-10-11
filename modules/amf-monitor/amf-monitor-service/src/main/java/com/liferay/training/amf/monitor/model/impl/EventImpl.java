@@ -27,11 +27,13 @@ import aQute.bnd.annotation.ProviderType;
  */
 @ProviderType
 public class EventImpl extends EventBaseImpl {
-	/*
+
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. All methods that expect a event model instance should use the {@link com.liferay.training.amf.monitor.model.Event} interface instead.
 	 */
 	public EventImpl() {
 	}
+
 }

@@ -13,13 +13,13 @@
 		<column name="userName" type="String" />
 		<column name="userId" type="long" />
 		<column name="ipAddress" type="String" />
-		
+
 		<finder name="UserName" return-type="Collection">
-			<finder-column name="userName"/>
+			<finder-column name="userName" />
 		</finder>
 		<finder name="UserNameAndEventType" return-type="Collection">
-			<finder-column name="userName"/>
-			<finder-column name="eventType"/>
+			<finder-column name="userName" />
+			<finder-column name="eventType" />
 		</finder>
 	</entity>
 </service-builder>

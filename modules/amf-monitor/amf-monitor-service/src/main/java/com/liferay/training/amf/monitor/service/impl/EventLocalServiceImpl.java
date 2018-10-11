@@ -14,8 +14,6 @@
 
 package com.liferay.training.amf.monitor.service.impl;
 
-import java.util.List;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
@@ -25,6 +23,8 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.training.amf.monitor.model.Event;
 import com.liferay.training.amf.monitor.service.base.EventLocalServiceBaseImpl;
 import com.liferay.training.amf.monitor.service.permission.EventPermissionChecker;
+
+import java.util.List;
 
 /**
  * The implementation of the event local service.
@@ -41,54 +41,55 @@ import com.liferay.training.amf.monitor.service.permission.EventPermissionChecke
  * @see com.liferay.training.amf.monitor.service.EventLocalServiceUtil
  */
 public class EventLocalServiceImpl extends EventLocalServiceBaseImpl {
-	/*
+
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Always use {@link com.liferay.training.amf.monitor.service.EventLocalServiceUtil} to access the event local service.
 	 */
-	
 	@Override
 	public Event addEvent(Event event) {
-		long eventId =
-				counterLocalService.increment(Event.class.getName());
-		
+		long eventId = counterLocalService.increment(Event.class.getName());
+
 		event.setEventId(eventId);
-		
+
 		return super.addEvent(event);
 	}
-	
+
 	public List<Event> getEvents(long groupId, int start, int end, OrderByComparator<Event> comparator) {
-		
 		List<Event> events = null;
+
 		try {
 			if (EventPermissionChecker.contains(getPermissionChecker(), groupId, EventPermissionChecker.VIEW_EVENTS_FOR_ALL_USERS))
 				events = eventPersistence.findAll(start, end, comparator);
-			else
-				_log.fatal("EventPermissionChecker.contains returned false");
+			else _log.fatal("EventPermissionChecker.contains returned false");
 		} catch (Exception e) {
 			_log.fatal(String.format("EventLocalServiceImpl.getEvents: %s", e.getMessage()));
-		} 
+		}
+
 		return events;
 	}
-	
+
 	public List<Event> getEvents(String userName, int start, int end, OrderByComparator<Event> comparator) {
-		
 		return eventPersistence.findByUserName(userName, start, end, comparator);
 	}
-	
-	public List<Event> getEvents(String userName, String eventType, int start, int end, OrderByComparator<Event> comparator) {
+
+	public List<Event> getEvents(
+		String userName, String eventType, int start, int end, OrderByComparator<Event> comparator) {
+
 		return eventPersistence.findByUserNameAndEventType(userName, eventType, start, end, comparator);
 	}
 
 	@Override
 	public List<Event> getEventsByEventType(String eventType, int start, int end) {
+
 		// TODO Auto-generated method stub
+
 		return null;
 	}
-	
+
 	public PermissionChecker getPermissionChecker() throws PrincipalException {
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
+		PermissionChecker permissionChecker = PermissionThreadLocal.getPermissionChecker();
 
 		if (permissionChecker == null) {
 			throw new PrincipalException("PermissionChecker not initialized");
@@ -96,6 +97,7 @@ public class EventLocalServiceImpl extends EventLocalServiceBaseImpl {
 
 		return permissionChecker;
 	}
-	
+
 	private static final Log _log = LogFactoryUtil.getLog(EventLocalServiceImpl.class);
+
 }
