@@ -57,14 +57,19 @@ public class EventLocalServiceImpl extends EventLocalServiceBaseImpl {
 	}
 
 	public List<Event> getEvents(long groupId, int start, int end, OrderByComparator<Event> comparator) {
-		List<Event> events = null;
-
+		
 		try {
-			if (EventPermissionChecker.contains(getPermissionChecker(), groupId, EventPermissionChecker.VIEW_EVENTS_FOR_ALL_USERS))
-				events = eventPersistence.findAll(start, end, comparator);
-			else _log.fatal("EventPermissionChecker.contains returned false");
+			EventPermissionChecker.check(getPermissionChecker(), groupId, EventPermissionChecker.VIEW_EVENTS_FOR_ALL_USERS);
 		} catch (Exception e) {
-			_log.fatal(String.format("EventLocalServiceImpl.getEvents: %s", e.getMessage()));
+			_log.fatal(String.format("EventPermissionChecker.check exception: %s", e.getMessage()));
+			return null;
+		}
+		
+		List<Event> events = null;
+		try {
+			events = eventPersistence.findAll(start, end, comparator);
+		} catch (Exception e) {
+			_log.fatal(String.format("EventLocalServiceImpl.getEvents exception: %s", e.getMessage()));
 		}
 
 		return events;
