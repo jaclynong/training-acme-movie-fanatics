@@ -66,13 +66,14 @@ public class NewsletterIssuesMVCRenderCommand implements MVCRenderCommand {
 			newsletterIssues);
 
 		Set<String> newsletterIssueYears = newsletterIssuePerYearMap.keySet();
-		String newsletterIssueYearsCommaDelimitedString = String.join(",", newsletterIssueYears);
+		List<String> newsletterIssueYearsDesc = sortYears(newsletterIssueYears);
+		String newsletterIssueYearsCommaDelimitedString = String.join(",", newsletterIssueYearsDesc);
 
 		List<Month> monthsInDescendingOrder = getMonthsInDescendingOrder();
 
 		renderRequest.setAttribute("monthsInDescendingOrder", monthsInDescendingOrder);
 		renderRequest.setAttribute("newsletterIssuePerYearMap", newsletterIssuePerYearMap);
-		renderRequest.setAttribute("newsletterIssueYears", newsletterIssueYears);
+		renderRequest.setAttribute("newsletterIssueYears", newsletterIssueYearsDesc);
 		renderRequest.setAttribute(
 			"newsletterIssueYearsCommaDelimitedString", newsletterIssueYearsCommaDelimitedString);
 
@@ -177,6 +178,15 @@ public class NewsletterIssuesMVCRenderCommand implements MVCRenderCommand {
 		return newsletterIssuePerYearMap;
 	}
 
+	private List<String> sortYears(Set<String> years) {
+		List<String> sortedList = new ArrayList<String>(years);
+		
+		Collections.sort(sortedList);
+		Collections.reverse(sortedList);
+
+		return sortedList;
+	}
+	
 	private static final String VIEW_PATH = "/view.jsp";
 
 	private static final Log _log = LogFactoryUtil.getLog(NewsletterIssuesMVCRenderCommand.class);
