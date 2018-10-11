@@ -1,4 +1,8 @@
-package com.liferay.training.amf.newsletter.web.portleturlgeneration;
+package com.liferay.training.amf.helper;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -6,11 +10,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
-
-//TODO: move this to a shared module available for any web module
 public class PortletUrlGenerator {
 
 	public PortletURL generate(ActionRequest actionRequest, long groupId, String friendlyUrl, String portletKey) {

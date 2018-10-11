@@ -1,0 +1,4 @@
+Bundle-Name: amf-web-shared
+Bundle-SymbolicName: amf.web.shared
+Bundle-Version: 1.0.0
+Export-Package: com.liferay.training.amf.helper
