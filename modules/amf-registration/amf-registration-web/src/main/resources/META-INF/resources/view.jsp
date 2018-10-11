@@ -5,11 +5,6 @@
 		name="mvcRenderCommandName"
 		value="/user/signup"
 	/>
-
-	<portlet:param
-		name="urlTitle"
-		value="signup"
-	/>
 </portlet:renderURL>
 
 <portlet:renderURL var="signInUrl">
