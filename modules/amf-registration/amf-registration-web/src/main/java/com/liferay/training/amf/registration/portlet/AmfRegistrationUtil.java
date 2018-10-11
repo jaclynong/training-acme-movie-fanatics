@@ -1,19 +1,20 @@
 package com.liferay.training.amf.registration.portlet;
 
-import java.text.SimpleDateFormat;
-
-import javax.portlet.ActionRequest;
-
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.training.amf.registration.model.Registration;
 
+import java.text.SimpleDateFormat;
+
+import javax.portlet.ActionRequest;
+
 public class AmfRegistrationUtil {
-	
+
 	public static Registration createRegistration(ActionRequest request) throws PortalException
 	{
+
 		Registration registration = new Registration();
-		
+
 		registration.set_firstName(ParamUtil.getString(request, "firstName"));
 		registration.set_lastName(ParamUtil.getString(request, "lastName"));
 		registration.set_emailAddress(ParamUtil.getString(request, "emailAddress"));
@@ -30,10 +31,12 @@ public class AmfRegistrationUtil {
 		registration.set_state(ParamUtil.getString(request, "state"));
 		registration.set_zipCode(ParamUtil.getString(request, "zip"));
 		String securityQuestion = ParamUtil.getString(request, "securityQuestion");
+
 		registration.set_securityQuestion(securityQuestion);
 		registration.set_securityQuestionAnswer(ParamUtil.getString(request, "answer"));
 		registration.set_acceptedTermsOfUse(ParamUtil.getBoolean(request, "termsOfUse"));
-		
+
 		return registration;
 	}
+
 }

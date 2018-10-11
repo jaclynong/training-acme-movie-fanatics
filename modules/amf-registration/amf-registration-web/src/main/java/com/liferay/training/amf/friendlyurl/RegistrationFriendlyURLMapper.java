@@ -1,9 +1,10 @@
 package com.liferay.training.amf.friendlyurl;
 
-import org.osgi.service.component.annotations.Component;
 import com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper;
 import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
 import com.liferay.training.amf.registration.constants.AmfRegistrationPortletKeys;
+
+import org.osgi.service.component.annotations.Component;
 
 @Component(
 	property = {

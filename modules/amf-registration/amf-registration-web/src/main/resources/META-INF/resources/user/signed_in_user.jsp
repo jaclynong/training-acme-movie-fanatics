@@ -1,7 +1,9 @@
-<%@ include file="/init.jsp"%>
+<%@ include file="/init.jsp" %>
 
-<portlet:actionURL var="signOutUrl"
-				   name="/user/signout">
+<portlet:actionURL
+	name="/user/signout"
+	var="signOutUrl"
+>
 	<portlet:param name="redirect" value="${param.redirect}" />
 </portlet:actionURL>
 
