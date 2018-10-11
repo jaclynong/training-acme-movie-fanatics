@@ -19,10 +19,7 @@ public class EventPermissionChecker extends BaseResourcePermissionChecker {
 	public static void check(PermissionChecker permissionChecker, long groupId, String actionId)
 		throws PortalException {
 
-		_log.fatal("Entered EventPermissionChecker.check");
-		
 		if (!contains(permissionChecker, groupId, actionId)) {
-			_log.fatal("Entered EventPermissionChecker.check - does not contain permission");
 			throw new PrincipalException.MustHavePermission(
 				permissionChecker.getUserId(), RESOURCE_NAME, groupId, actionId);
 		}
