@@ -31,9 +31,11 @@ import com.liferay.training.amf.registration.service.base.FooLocalServiceBaseImp
  * @see com.liferay.training.amf.registration.service.FooLocalServiceUtil
  */
 public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
-	/*
+
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Always use {@link com.liferay.training.amf.registration.service.FooLocalServiceUtil} to access the foo local service.
 	 */
+
 }

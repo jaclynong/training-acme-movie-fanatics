@@ -1,7 +1,6 @@
 Bundle-Name: amf-registration-service
 Bundle-SymbolicName: com.liferay.training.amf.registration.service
 Bundle-Version: 1.0.0
+Export-Package: 	com.liferay.training.amf.registration.service.impl
 Liferay-Require-SchemaVersion: 1.0.0
 Liferay-Service: true
-Export-Package: \
-	com.liferay.training.amf.registration.service.impl

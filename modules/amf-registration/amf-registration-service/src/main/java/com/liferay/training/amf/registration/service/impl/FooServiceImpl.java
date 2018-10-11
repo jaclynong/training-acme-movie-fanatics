@@ -31,9 +31,11 @@ import com.liferay.training.amf.registration.service.base.FooServiceBaseImpl;
  * @see com.liferay.training.amf.registration.service.FooServiceUtil
  */
 public class FooServiceImpl extends FooServiceBaseImpl {
-	/*
+
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Always use {@link com.liferay.training.amf.registration.service.FooServiceUtil} to access the foo remote service.
 	 */
+
 }

@@ -2,7 +2,8 @@
 
 <portlet:actionURL
 	name="/user/signup/redirect"
-	var="signUpUrl"/>
+	var="signUpUrl"
+/>
 
 <portlet:renderURL var="signInUrl">
 	<portlet:param

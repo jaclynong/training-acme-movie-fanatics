@@ -27,11 +27,13 @@ import aQute.bnd.annotation.ProviderType;
  */
 @ProviderType
 public class FooImpl extends FooBaseImpl {
-	/*
+
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. All methods that expect a foo model instance should use the {@link com.liferay.training.amf.registration.model.Foo} interface instead.
 	 */
 	public FooImpl() {
 	}
+
 }
