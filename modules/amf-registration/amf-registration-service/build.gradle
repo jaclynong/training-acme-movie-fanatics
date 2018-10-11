@@ -5,9 +5,3 @@ dependencies {
 	compileOnly project(":modules:amf-monitor:amf-monitor-api")
 	compileOnly project(":modules:amf-registration:amf-registration-api")
 }
-
-buildService {
-	apiDir = "../amf-registration-api/src/main/java"
-}
-
-group = "com.liferay.training.amf.registration"
