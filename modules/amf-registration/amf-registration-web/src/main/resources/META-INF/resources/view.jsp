@@ -1,11 +1,8 @@
 <%@ include file="/init.jsp" %>
 
-<portlet:renderURL var="signUpUrl">
-	<portlet:param
-		name="mvcRenderCommandName"
-		value="/user/signup"
-	/>
-</portlet:renderURL>
+<portlet:actionURL
+	name="/user/signup/redirect"
+	var="signUpUrl"/>
 
 <portlet:renderURL var="signInUrl">
 	<portlet:param

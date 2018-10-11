@@ -8,6 +8,7 @@ dependencies {
 	compileOnly project(":modules:amf-monitor:amf-monitor-api")
 	compileOnly project(":modules:amf-registration:amf-registration-api")
 	compileOnly project(":modules:amf-registration:amf-registration-service")
+	compileOnly project(":modules:amf-web-shared")
 }
 
 subprojects {
