@@ -47,18 +47,12 @@ public class NewsletterIssue {
 		return _newsletterArticles;
 	}
 
-	private String _title;
-	
 	public String get_title() {
 		if (_journalArticle != null) {
 			return _journalArticle.getTitleCurrentValue();
 		} else {
 			return _title;
 		}
-	}
-	
-	public void set_title(String _title) {
-		this._title = _title;
 	}
 
 	public void set_byline(String _byline) {
@@ -79,6 +73,10 @@ public class NewsletterIssue {
 
 	public void set_newsletterArticles(List<NewsletterArticle> _newsletterArticles) {
 		this._newsletterArticles = _newsletterArticles;
+	}
+
+	public void set_title(String _title) {
+		this._title = _title;
 	}
 
 	//TODO: move this method out to a separate class
@@ -105,5 +103,6 @@ public class NewsletterIssue {
 	private Integer _issueNumber;
 	private JournalArticle _journalArticle;
 	private List<NewsletterArticle> _newsletterArticles;
+	private String _title;
 
 }

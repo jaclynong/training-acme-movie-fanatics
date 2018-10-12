@@ -1,10 +1,6 @@
 package com.liferay.training.amf.newsletter.web.portlet.command;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletURL;
-
-import org.osgi.service.component.annotations.Component;
+import amf.newsletter.web.constants.AmfNewsletterWebPortletKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -15,7 +11,11 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.training.amf.helper.PortletUrlGenerator;
 
-import amf.newsletter.web.constants.AmfNewsletterWebPortletKeys;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletURL;
+
+import org.osgi.service.component.annotations.Component;
 
 @Component(immediate = true,
 property = {
