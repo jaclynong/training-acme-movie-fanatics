@@ -1,16 +1,17 @@
 package com.liferay.training.amf.registration.service.impl;
 
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.training.amf.registration.model.Registration;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.training.amf.registration.model.Registration;
 
 public class RegistrationValidationServiceImpl {
 
@@ -33,8 +34,6 @@ public class RegistrationValidationServiceImpl {
 
 			return false;
 		}
-
-		//TODO: put this length checking in separate method
 
 		if (!isLengthValid(firstName, MIN_LENGTH_REQUIRED, MAX_FIRST_NAME_LENGTH)) {
 			errors.add("keyFirstNameLengthExceeded");
@@ -145,7 +144,7 @@ public class RegistrationValidationServiceImpl {
 		}
 
 		String homePhoneNumber = registration.get_homePhoneNumber();
-		
+
 		if (!isPhoneNumberValid(homePhoneNumber)) {
 			errors.add("keyHomePhoneInvalid");
 
@@ -153,7 +152,7 @@ public class RegistrationValidationServiceImpl {
 		}
 
 		String mobilePhoneNumber = registration.get_mobilePhoneNumber();
-		
+
 		if (!isPhoneNumberValid(mobilePhoneNumber)) {
 			errors.add("keyMobilePhoneInvalid");
 
@@ -268,12 +267,15 @@ public class RegistrationValidationServiceImpl {
 	}
 
 	private static boolean isPhoneNumberValid(String phoneNumber) {
-		
-		if (Validator.isBlank(phoneNumber))
-			return false;
-		
+		if (Validator.isBlank(phoneNumber)) return false;
+
 		String phoneNumberDigits = StringUtil.extractDigits(phoneNumber);
-		return phoneNumberDigits.length() == PHONE_NUMBER_LENGTH && Validator.isPhoneNumber(phoneNumber);
+
+		if (phoneNumberDigits.length() == PHONE_NUMBER_LENGTH && Validator.isPhoneNumber(phoneNumber)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private static final int MAX_ADDRESS1_LENGTH = 255;
@@ -298,7 +300,7 @@ public class RegistrationValidationServiceImpl {
 	private static final int MIN_USERNAME_LENGTH = 4;
 
 	private static final String PASSWORD_REGEX = "";
-	
+
 	private static final int PHONE_NUMBER_LENGTH = 10;
 
 	private static final int ZIP_LENGTH = 5;
