@@ -29,7 +29,7 @@ public class RegistrationValidationServiceImpl {
 		String firstName = registration.get_firstName();
 
 		if (Validator.isBlank(firstName)) {
-			errors.add("key-first-name-blank");
+			errors.add("keyFirstNameBlank");
 
 			return false;
 		}
@@ -37,13 +37,13 @@ public class RegistrationValidationServiceImpl {
 		//TODO: put this length checking in separate method
 
 		if (!isLengthValid(firstName, MIN_LENGTH_REQUIRED, MAX_FIRST_NAME_LENGTH)) {
-			errors.add("key-first-name-length-exceeded");
+			errors.add("keyFirstNameLengthExceeded");
 
 			return false;
 		}
 
 		if (!Validator.isAlphanumericName(firstName)) {
-			errors.add("key-first-name-not-alphanumeric");
+			errors.add("keyFirstNameNotAlphanumeric");
 
 			return false;
 		}
@@ -51,19 +51,19 @@ public class RegistrationValidationServiceImpl {
 		String lastName = registration.get_lastName();
 
 		if (Validator.isBlank(lastName)) {
-			errors.add("key-last-name-blank");
+			errors.add("keyLastNameBlank");
 
 			return false;
 		}
 
 		if (!isLengthValid(lastName, MIN_LENGTH_REQUIRED, MAX_LAST_NAME_LENGTH)) {
-			errors.add("key-last-name-length-exceeded");
+			errors.add("keyLastNameLengthExceeded");
 
 			return false;
 		}
 
 		if (!Validator.isAlphanumericName(lastName)) {
-			errors.add("key-last-name-not-alphanumeric");
+			errors.add("keyLastNameNotAlphanumeric");
 
 			return false;
 		}
@@ -71,19 +71,19 @@ public class RegistrationValidationServiceImpl {
 		String emailAddress = registration.get_emailAddress();
 
 		if (Validator.isBlank(emailAddress)) {
-			errors.add("key-email-blank");
+			errors.add("keyEmailBlank");
 
 			return false;
 		}
 
 		if (!Validator.isEmailAddress(emailAddress)) {
-			errors.add("key-email-invalid");
+			errors.add("keyEmailInvalid");
 
 			return false;
 		}
 
 		if (!isLengthValid(emailAddress, MIN_LENGTH_REQUIRED, MAX_EMAIL_ADDRESS_LENGTH)) {
-			errors.add("key-email-length-exceeded");
+			errors.add("keyEmailLengthExceeded");
 
 			return false;
 		}
@@ -91,19 +91,19 @@ public class RegistrationValidationServiceImpl {
 		String username = registration.get_userName();
 
 		if (Validator.isBlank(username)) {
-			errors.add("key-username-blank");
+			errors.add("keyUsernameBlank");
 
 			return false;
 		}
 
 		if (!isLengthValid(username, MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)) {
-			errors.add("key-username-length-invalid");
+			errors.add("keyUsernameLengthInvalid");
 
 			return false;
 		}
 
 		if (!Validator.isAlphanumericName(username)) {
-			errors.add("key-username-not-alphanumeric");
+			errors.add("keyUsernameNotAlphanumeric");
 
 			return false;
 		}
@@ -117,7 +117,7 @@ public class RegistrationValidationServiceImpl {
 		int age = Period.between(birthdayLocalDate, LocalDate.now()).getYears();
 
 		if (age < MIN_AGE) {
-			errors.add("key-min-age-exceeded");
+			errors.add("keyMinAgeExceeded");
 
 			return false;
 		}
@@ -125,13 +125,13 @@ public class RegistrationValidationServiceImpl {
 		String password = registration.get_password();
 
 		if (Validator.isBlank(password)) {
-			errors.add("key-password-blank");
+			errors.add("keyPasswordBlank");
 
 			return false;
 		}
 
 		if (!doesPasswordMeetCriteria(password)) {
-			errors.add("key-password-invalid");
+			errors.add("keyPasswordInvalid");
 
 			return false;
 		}
@@ -139,7 +139,7 @@ public class RegistrationValidationServiceImpl {
 		String confirmPassword = registration.get_confirmPassword();
 
 		if (!password.equals(confirmPassword)) {
-			errors.add("key-passwords-not-matching");
+			errors.add("keyPasswordsNotMatching");
 
 			return false;
 		}
@@ -147,7 +147,7 @@ public class RegistrationValidationServiceImpl {
 		String homePhoneNumber = registration.get_homePhoneNumber();
 
 		if (!isPhoneNumberValid(homePhoneNumber)) {
-			errors.add("key-home-phone-invalid");
+			errors.add("keyHomePhoneInvalid");
 
 			return false;
 		}
@@ -155,7 +155,7 @@ public class RegistrationValidationServiceImpl {
 		String mobilePhoneNumber = registration.get_mobilePhoneNumber();
 
 		if (!isPhoneNumberValid(mobilePhoneNumber)) {
-			errors.add("key-mobile-phone-invalid");
+			errors.add("keyMobilePhoneInvalid");
 
 			return false;
 		}
@@ -165,19 +165,19 @@ public class RegistrationValidationServiceImpl {
 		String address1 = registration.get_address1();
 
 		if (Validator.isBlank(address1)) {
-			errors.add("key-address1-blank");
+			errors.add("keyAddress1Blank");
 
 			return false;
 		}
 
 		if (!isLengthValid(address1, MIN_LENGTH_REQUIRED, MAX_ADDRESS1_LENGTH)) {
-			errors.add("key-address1-length-exceeded");
+			errors.add("keyAddress1LengthExceeded");
 
 			return false;
 		}
 
 		if (!Validator.isAlphanumericName(address1)) {
-			errors.add("key-address1-not-alphanumeric");
+			errors.add("keyAddress1NotAlphanumeric");
 
 			return false;
 		}
@@ -185,13 +185,13 @@ public class RegistrationValidationServiceImpl {
 		String address2 = registration.get_address2();
 
 		if (!isLengthValid(address2, MIN_LENGTH_REQUIRED, MAX_ADDRESS2_LENGTH)) {
-			errors.add("key-address2-length-exceeded");
+			errors.add("keyAddress2LengthExceeded");
 
 			return false;
 		}
 
 		if (!Validator.isAlphanumericName(address2)) {
-			errors.add("key-address2-not-alphanumeric");
+			errors.add("keyAddress2NotAlphanumeric");
 
 			return false;
 		}
@@ -199,13 +199,13 @@ public class RegistrationValidationServiceImpl {
 		String city = registration.get_city();
 
 		if (Validator.isBlank(city)) {
-			errors.add("key-city-blank");
+			errors.add("keyCityBlank");
 
 			return false;
 		}
 
 		if (!Validator.isAlphanumericName(city)) {
-			errors.add("key-city-not-alphanumeric");
+			errors.add("keyCityNotAlphanumeric");
 
 			return false;
 		}
@@ -213,7 +213,7 @@ public class RegistrationValidationServiceImpl {
 		String state = registration.get_state();
 
 		if (Validator.isBlank(state)) {
-			errors.add("key-state-blank");
+			errors.add("keyStateBlank");
 
 			return false;
 		}
@@ -221,13 +221,13 @@ public class RegistrationValidationServiceImpl {
 		String zipCode = registration.get_zipCode();
 
 		if (Validator.isBlank(zipCode)) {
-			errors.add("key-zip-blank");
+			errors.add("keyZipBlank");
 
 			return false;
 		}
 
 		if (zipCode.length() != ZIP_LENGTH) {
-			errors.add("key-zip-length-invalid");
+			errors.add("keyZipLengthInvalid");
 
 			return false;
 		}
@@ -235,7 +235,7 @@ public class RegistrationValidationServiceImpl {
 		String securityQuestion = registration.get_securityQuestion();
 
 		if (Validator.isBlank(securityQuestion)) {
-			errors.add("key-security-question-blank");
+			errors.add("keySecurityQuestionBlank");
 
 			return false;
 		}
@@ -243,7 +243,7 @@ public class RegistrationValidationServiceImpl {
 		String securityQuestionAnswer = registration.get_securityQuestionAnswer();
 
 		if (Validator.isBlank(securityQuestionAnswer)) {
-			errors.add("key-security-answer-blank");
+			errors.add("keySecurityAnswerBlank");
 
 			return false;
 		}
@@ -251,7 +251,7 @@ public class RegistrationValidationServiceImpl {
 		boolean termsOfUseAccepted = registration.get_acceptedTermsOfUse();
 
 		if (!termsOfUseAccepted) {
-			errors.add("key-terms-of-use-unaccepted");
+			errors.add("keyTermsOfUseUnaccepted");
 
 			return false;
 		}
