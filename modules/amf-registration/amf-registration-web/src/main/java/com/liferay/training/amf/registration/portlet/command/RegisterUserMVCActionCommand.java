@@ -1,26 +1,7 @@
 package com.liferay.training.amf.registration.portlet.command;
 
-import com.liferay.portal.kernel.model.Country;
-import com.liferay.portal.kernel.model.Region;
-import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.service.AddressLocalServiceUtil;
-import com.liferay.portal.kernel.service.CountryServiceUtil;
-import com.liferay.portal.kernel.service.RegionServiceUtil;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.ServiceContextFactory;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
-import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.servlet.SessionMessages;
-import com.liferay.training.amf.registration.constants.AmfRegistrationPortletKeys;
-import com.liferay.training.amf.registration.model.Registration;
-import com.liferay.training.amf.registration.portlet.AmfRegistrationUtil;
-import com.liferay.training.amf.registration.service.impl.RegistrationValidationServiceImpl;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +12,29 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletSession;
 
 import org.osgi.service.component.annotations.Component;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Country;
+import com.liferay.portal.kernel.model.Region;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.service.AddressLocalServiceUtil;
+import com.liferay.portal.kernel.service.CountryServiceUtil;
+import com.liferay.portal.kernel.service.PhoneLocalServiceUtil;
+import com.liferay.portal.kernel.service.RegionServiceUtil;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.training.amf.registration.constants.AmfRegistrationPortletKeys;
+import com.liferay.training.amf.registration.model.PhoneType;
+import com.liferay.training.amf.registration.model.Registration;
+import com.liferay.training.amf.registration.portlet.AmfRegistrationUtil;
+import com.liferay.training.amf.registration.service.impl.RegistrationValidationServiceImpl;
 
 @Component(
 		immediate = true,
@@ -107,8 +111,13 @@ public class RegisterUserMVCActionCommand extends BaseMVCActionCommand {
 			}
 
 			SessionMessages.add(actionRequest, "userUpdated");
-
+			
 			long userId = user.getUserId();
+			String className = null;
+			long classPK = 0;
+			
+			savePhoneNumber(userId, className, classPK, registration.get_homePhoneNumber(), PhoneType.PERSONAL, serviceContext);
+			savePhoneNumber(userId, className, classPK, registration.get_mobilePhoneNumber(), PhoneType.MOBILE, serviceContext);
 
 			//TODO: move security question to separate method
 			String securityQuestion = registration.get_securityQuestion();
@@ -120,8 +129,6 @@ public class RegisterUserMVCActionCommand extends BaseMVCActionCommand {
 			UserLocalServiceUtil.updateAgreedToTermsOfUse(userId, agreedToTermsOfUse);
 
 			//TODO: break out into separate method
-			String className = null;
-			long classPK = 0;
 			String street1 = registration.get_address1();
 			String street2 = registration.get_address2();
 			String street3 = null;
@@ -149,7 +156,6 @@ public class RegisterUserMVCActionCommand extends BaseMVCActionCommand {
 			portletSession.setAttribute("usernameSignedIn", userName, PortletSession.APPLICATION_SCOPE);
 
 			SessionMessages.add(actionRequest, "keyUserAddedSuccessfully");
-			//String test = (String)SessionMessages.get(actionRequest, "userAddedSuccessfully");
 
 			hideDefaultSuccessMessage(actionRequest);
 
@@ -165,4 +171,16 @@ public class RegisterUserMVCActionCommand extends BaseMVCActionCommand {
 		}
 	}
 
+	private void savePhoneNumber(long userId, String className, long classPK, String phoneNumber, PhoneType phoneType, ServiceContext serviceContext) {
+		if (phoneNumber == null || phoneNumber.isEmpty()) 
+			return;
+		
+		try {
+			PhoneLocalServiceUtil.addPhone(userId, className, classPK, phoneNumber, null, phoneType.getPhoneTypeId(), true, serviceContext);
+		} catch (PortalException e) {
+			_log.fatal(String.format("honeLocalServiceUtil.addPhone exception: %s", e.getMessage()));
+		}
+	}
+	
+	private static final Log _log = LogFactoryUtil.getLog(RegisterUserMVCActionCommand.class);
 }
