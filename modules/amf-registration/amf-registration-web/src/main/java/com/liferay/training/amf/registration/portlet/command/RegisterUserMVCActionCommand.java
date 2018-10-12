@@ -52,7 +52,7 @@ public class RegisterUserMVCActionCommand extends BaseMVCActionCommand {
 		hideDefaultErrorMessage(actionRequest);
 
 		//TODO: move logic to service layer
-		
+
 		long companyId = 20115; //TODO: look up via service
 
 		Registration registration = AmfRegistrationUtil.createRegistration(actionRequest);

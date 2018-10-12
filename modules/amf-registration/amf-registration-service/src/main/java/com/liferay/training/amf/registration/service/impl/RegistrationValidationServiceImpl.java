@@ -1,18 +1,19 @@
 package com.liferay.training.amf.registration.service.impl;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.training.amf.registration.model.Registration;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegistrationValidationServiceImpl {
 
@@ -87,11 +88,12 @@ public class RegistrationValidationServiceImpl {
 
 			return false;
 		}
-		
+
 		User userWithSameEmailAddress = UserLocalServiceUtil.fetchUserByEmailAddress(companyId, emailAddress);
+
 		if (userWithSameEmailAddress != null) {
 			errors.add("keyEmailAlreadyExists");
-			
+
 			return false;
 		}
 
@@ -116,9 +118,10 @@ public class RegistrationValidationServiceImpl {
 		}
 
 		User userWithSameUsername = UserLocalServiceUtil.fetchUserByScreenName(companyId, username);
+
 		if (userWithSameUsername != null) {
 			errors.add("keyUsernameAlreadyExists");
-			
+
 			return false;
 		}
 
