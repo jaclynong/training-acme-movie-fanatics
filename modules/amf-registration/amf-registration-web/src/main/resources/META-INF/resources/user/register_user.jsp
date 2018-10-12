@@ -17,6 +17,7 @@
 <liferay-ui:error key="keyEmailBlank" message="email-blank" />
 <liferay-ui:error key="keyEmailInvalid" message="email-invalid" />
 <liferay-ui:error key="keyEmailLengthExceeded" message="email-length-exceeded" />
+<liferay-ui:error key="keyEmailAlreadyExists" message="email-already-exists" />
 <liferay-ui:error key="keyUsernameBlank" message="username-blank" />
 <liferay-ui:error key="keyUsernameLengthInvalid" message="username-length-invalid" />
 <liferay-ui:error key="keyUsernameNotAlphanumeric" message="username-not-alphanumeric" />

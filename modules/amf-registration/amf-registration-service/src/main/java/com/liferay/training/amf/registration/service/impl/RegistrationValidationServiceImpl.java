@@ -87,6 +87,13 @@ public class RegistrationValidationServiceImpl {
 
 			return false;
 		}
+		
+		User userWithSameEmailAddress = UserLocalServiceUtil.fetchUserByEmailAddress(companyId, emailAddress);
+		if (userWithSameEmailAddress != null) {
+			errors.add("keyEmailAlreadyExists");
+			
+			return false;
+		}
 
 		String username = registration.get_userName();
 
