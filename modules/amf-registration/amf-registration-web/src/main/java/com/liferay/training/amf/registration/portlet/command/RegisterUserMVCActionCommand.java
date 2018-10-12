@@ -52,6 +52,8 @@ public class RegisterUserMVCActionCommand extends BaseMVCActionCommand {
 		hideDefaultErrorMessage(actionRequest);
 
 		//TODO: move logic to service layer
+		
+		long companyId = 20115; //TODO: look up via service
 
 		Registration registration = AmfRegistrationUtil.createRegistration(actionRequest);
 
@@ -59,11 +61,10 @@ public class RegisterUserMVCActionCommand extends BaseMVCActionCommand {
 
 		RegistrationValidationServiceImpl validationService = new RegistrationValidationServiceImpl();
 
-		if (validationService.isRegistrationValid(registration, errors)) {
+		if (validationService.isRegistrationValid(registration, companyId, errors)) {
 
 			//TODO: break out into separate method
 			long creatorUserId = 0;
-			long companyId = 20115; //TODO: look up via service
 			boolean autoPassword = false;
 			boolean autoScreenName = false;
 			String firstName = registration.get_firstName();

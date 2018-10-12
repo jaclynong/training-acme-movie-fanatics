@@ -20,6 +20,7 @@
 <liferay-ui:error key="keyUsernameBlank" message="username-blank" />
 <liferay-ui:error key="keyUsernameLengthInvalid" message="username-length-invalid" />
 <liferay-ui:error key="keyUsernameNotAlphanumeric" message="username-not-alphanumeric" />
+<liferay-ui:error key="keyUsernameAlreadyExists" message="username-already-exists" />
 <liferay-ui:error key="keyMinAgeExceeded" message="min-age-exceeded" />
 <liferay-ui:error key="keyPasswordBlank" message="password-blank" />
 <liferay-ui:error key="keyPasswordInvalid" message="password-invalid" />

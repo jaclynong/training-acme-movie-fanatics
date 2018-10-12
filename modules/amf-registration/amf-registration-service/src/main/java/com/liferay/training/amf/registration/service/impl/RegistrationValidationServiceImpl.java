@@ -1,17 +1,18 @@
 package com.liferay.training.amf.registration.service.impl;
 
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.training.amf.registration.model.Registration;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
-
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.training.amf.registration.model.Registration;
 
 public class RegistrationValidationServiceImpl {
 
@@ -22,7 +23,7 @@ public class RegistrationValidationServiceImpl {
 	}
 
 	//TODO: add unit tests
-	public static boolean isRegistrationValid(Registration registration, List<String> errors) {
+	public static boolean isRegistrationValid(Registration registration, long companyId, List<String> errors) {
 
 		//TODO: the validation into smaller methods
 		//Note: even though the UI already checks for blank fields via the aui validator,
@@ -107,7 +108,12 @@ public class RegistrationValidationServiceImpl {
 			return false;
 		}
 
-		//TODO: make sure username is unique
+		User userWithSameUsername = UserLocalServiceUtil.fetchUserByScreenName(companyId, username);
+		if (userWithSameUsername != null) {
+			errors.add("keyUsernameAlreadyExists");
+			
+			return false;
+		}
 
 		Date birthday = registration.get_birthday();
 
